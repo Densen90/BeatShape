@@ -13,13 +13,10 @@ namespace BeatShape
 {
     class Game : GameWindow
     {
-        GameObject obj;
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            obj = new GameObject();
             this.Title = "Hello OpenTK";
 
             GL.ClearColor(Color.CornflowerBlue);
@@ -32,7 +29,7 @@ namespace BeatShape
             GL.Viewport(0, 0, Width, Height);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            obj.Render();
+            EventDispatcher.Invoke("RenderBehaviour");
 
             GL.Flush();
 
@@ -44,7 +41,7 @@ namespace BeatShape
         {
             base.OnUpdateFrame(e);
 
-            obj.Update();
+            EventDispatcher.Invoke("UpdateBehaviour");
         }
     }
 }

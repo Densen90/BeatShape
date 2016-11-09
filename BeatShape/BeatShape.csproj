@@ -47,14 +47,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Framework\GameObjectBase.cs" />
+    <Compile Include="Framework\EventDispatcher.cs" />
+    <Compile Include="Framework\GameObject.cs" />
+    <Compile Include="Framework\IBehaviour.cs" />
     <Compile Include="Framework\Mesh2D.cs" />
     <Compile Include="Framework\Shader.cs" />
     <Compile Include="Framework\ShaderLoader.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GameObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

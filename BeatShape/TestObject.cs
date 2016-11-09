@@ -7,16 +7,18 @@ using System.Threading.Tasks;
 
 namespace BeatShape
 {
-    class GameObject : GameObjectBase
+    class TestObject : GameObject
     {
-        public GameObject()
+        public TestObject(string name = "")
         {
-            Console.WriteLine("Making a new GameObject");
+            this.Name = name;
+            Console.WriteLine("Creating: " + this.Name);
         }
 
         public override void Update()
         {
             base.Update();
+            Console.WriteLine("Update " + this.Name);
         }
 
         public override void Render()
