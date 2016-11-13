@@ -9,16 +9,14 @@ namespace BeatShape
 {
     class TestObject : GameObject
     {
-        public TestObject(string name = "")
+        public TestObject(string name = "", Mesh2D m = null) : base(m)
         {
             this.Name = name;
-            Console.WriteLine("Creating: " + this.Name);
         }
 
         public override void Update()
         {
             base.Update();
-            Console.WriteLine("Update " + this.Name);
         }
 
         public override void Render()

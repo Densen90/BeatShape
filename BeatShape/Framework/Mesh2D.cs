@@ -55,9 +55,9 @@ namespace BeatShape.Framework
             init(vertdata, coldata, mviewdata);
         }
 
-        public Mesh2D(Vector3[] vertices, Vector3[] colors, Matrix4[] modelviews)
+        public Mesh2D(Vector3[] vertices, Vector3[] colors, Matrix4[] modelviews = null)
         {
-            init(vertices, colors, modelviews);
+            init(vertices, colors, modelviews==null ? new Matrix4[]{ Matrix4.Identity } : modelviews);
         }
 
         private void init(Vector3[] vertices, Vector3[] colors, Matrix4[] modelviews)
@@ -66,11 +66,20 @@ namespace BeatShape.Framework
             Colors = colors;
             ModelViews = modelviews;
 
-            Shader = ShaderLoader.FromFile("Shader\\vertex.glsl", "Shader\\fragment.glsl");
+            try
+            {
+                Shader = ShaderManager.GetShader("Default");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Mesh2D: Shader not found, load new one from File");
+                Shader = ShaderLoader.FromFile("Shader\\vertex.glsl", "Shader\\fragment.glsl");
+                ShaderManager.AddShader("Default", Shader);
+            }
 
-            attribute_vpos = shader.GetAttributeLocation("vPosition");
-            attribute_vcol = shader.GetAttributeLocation("vColor");
-            uniform_mview = shader.GetUniformLocation("modelview");
+            attribute_vpos = Shader.GetAttributeLocation("vPosition");
+            attribute_vcol = Shader.GetAttributeLocation("vColor");
+            uniform_mview = Shader.GetUniformLocation("modelview");
 
             if (attribute_vpos == -1 || attribute_vcol == -1 || uniform_mview == -1)
             {
@@ -84,6 +93,7 @@ namespace BeatShape.Framework
 
         public void Prepare()
         {
+            Shader.Begin();
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * Vector3.SizeInBytes), Vertices, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(attribute_vpos, 3, VertexAttribPointerType.Float, false, 0, 0);

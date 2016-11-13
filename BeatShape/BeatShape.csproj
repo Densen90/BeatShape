@@ -49,10 +49,12 @@
   <ItemGroup>
     <Compile Include="Framework\EventDispatcher.cs" />
     <Compile Include="Framework\GameObject.cs" />
+    <Compile Include="Framework\GameObjectManager.cs" />
     <Compile Include="Framework\IBehaviour.cs" />
     <Compile Include="Framework\Mesh2D.cs" />
     <Compile Include="Framework\Shader.cs" />
     <Compile Include="Framework\ShaderLoader.cs" />
+    <Compile Include="Framework\ShaderManager.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

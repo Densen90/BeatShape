@@ -11,28 +11,32 @@ namespace BeatShape.Framework
         public Mesh2D Mesh { get; set; }
         public string Name { get; set; }
 
+        public Guid InstaceID { get; private set; }
+
         public GameObject(Mesh2D mesh = null)
         {
-            Console.WriteLine("Create " + Name);
             Mesh = mesh ?? new Mesh2D();
+            InstaceID = System.Guid.NewGuid();
+
+            GameObjectManager.Add(this);
+
             EventDispatcher.AddListener("UpdateBehaviour", Update);
             EventDispatcher.AddListener("RenderBehaviour", Render);
         }
 
         public void Dispose()
         {
-            Console.WriteLine("Dispose " + Name);
             EventDispatcher.RemoveListener("UpdateBehaviour", Update);
             EventDispatcher.RemoveListener("RenderBehaviour", Render);
         }
 
         public virtual void Update()
         {
-            Mesh.Prepare();
         }
 
         public virtual void Render()
         {
+            Mesh.Prepare();
             Mesh.Render();
         }
 
