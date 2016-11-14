@@ -40,9 +40,25 @@ namespace BeatShape
                     Mesh2D m = new Mesh2D(vertdata, coldata);
 
                     count++;
-                    var obj = new TestObject("Object: " + count, m);
+                   // var obj = new TestObject("Object: " + count, m);
                 }
             }
+
+            List<Vector3> vertData = new List<Vector3>();
+            List<Vector3> colData = new List<Vector3>();
+            for (float x = -1.139f; x <= 1.139; x += 0.001f)
+            {
+                float delta = cbrt(x * x) * cbrt(x * x) - 4f * x * x + 4f;
+                float y1 = (cbrt(x * x) + (float)Math.Sqrt(delta)) / 2f;
+                float y2 = (cbrt(x * x) - (float)Math.Sqrt(delta)) / 2f;
+                vertData.Add(new Vector3(x, y1, 0f) * 0.8f);
+                vertData.Add(new Vector3(x, y2, 0f) * 0.8f);
+                colData.Add(new Vector3(1f, 0f, 0f));
+                colData.Add(new Vector3(1f, 0f, 0f));
+            }
+
+            Mesh2D mm = new Mesh2D(vertData.ToArray(), colData.ToArray());
+            var obj = new TestObject("Heart", mm);
 
             Console.WriteLine("Loading finished");
             GL.ClearColor(Color.CornflowerBlue);
@@ -57,7 +73,7 @@ namespace BeatShape
 
             EventDispatcher.Invoke("RenderBehaviour");
 
-            Console.WriteLine("FPS: " + 1f / e.Time);
+            //Console.WriteLine("FPS: " + 1f / e.Time);
 
             GL.Flush();
 
@@ -77,6 +93,11 @@ namespace BeatShape
             base.OnKeyDown(e);
 
             if (e.Key == Key.Escape) Close();
+        }
+
+        float cbrt(double x)
+        {
+            return (float)Math.Pow(x, (1.0 / 3.0));
         }
     }
 }

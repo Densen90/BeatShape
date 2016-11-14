@@ -116,7 +116,7 @@ namespace BeatShape.Framework
             GL.EnableVertexAttribArray(attribute_vcol);
 
             //Draw triangle
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
+            GL.DrawArrays(PrimitiveType.Polygon, 0, Vertices.Length);
 
             //Clean
             GL.DisableVertexAttribArray(attribute_vpos);
