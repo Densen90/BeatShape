@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Framework\EventDispatcher.cs" />
-    <Compile Include="Framework\GameObject.cs" />
+    <Compile Include="Framework\GameObjectBase.cs" />
     <Compile Include="Framework\GameObjectManager.cs" />
     <Compile Include="Framework\IBehaviour.cs" />
     <Compile Include="Framework\Mesh2D.cs" />

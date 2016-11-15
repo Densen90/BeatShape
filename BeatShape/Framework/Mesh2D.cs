@@ -1,10 +1,6 @@
 ﻿using OpenTK;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.OpenGL;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatShape.Framework
 {
@@ -12,30 +8,17 @@ namespace BeatShape.Framework
     {
         #region object data
         public Vector3[] Vertices { get; set; }
-
         public Vector3[] Colors { get; set; }
-
-        public Matrix4[] ModelViews { get; set; }
-
-        Shader shader;
-        Shader Shader
-        {
-            get { return shader; }
-            set { shader = value; }
-        }
+        public Matrix4 ModelViewMatrix { get; set; }
+        public Shader Shader { get; set; }
+        public PrimitiveType DrawType { get; set; }
         #endregion
 
-        #region attributes
-        private int attribute_vcol;
-        private int attribute_vpos;
-        private int uniform_mview;
-        #endregion
+        private int vertexArrayID; //VAO
+        private int vertexBuffer; //VBO
+        private int colorBuffer; //VBO
 
-        #region vertex buffer objects
-        private int vbo_position;
-        private int vbo_color;
-        private int vbo_mview;
-        #endregion
+        private int matrixID;
 
         public Mesh2D()
         {
@@ -48,23 +31,20 @@ namespace BeatShape.Framework
                 new Vector3( 0f, 0f, 1f),
                 new Vector3( 0f,  1f, 0f)};
 
-
-            Matrix4[] mviewdata = new Matrix4[]{
-                Matrix4.Identity
-            };
-            init(vertdata, coldata, mviewdata);
+            init(vertdata, coldata, Matrix4.Identity);
         }
 
-        public Mesh2D(Vector3[] vertices, Vector3[] colors, Matrix4[] modelviews = null)
+        public Mesh2D(Vector3[] vertices, Vector3[] colors, Matrix4 modelview = default(Matrix4))
         {
-            init(vertices, colors, modelviews==null ? new Matrix4[]{ Matrix4.Identity } : modelviews);
+            init(vertices, colors, modelview == default(Matrix4) ? Matrix4.Identity  : modelview);
         }
 
-        private void init(Vector3[] vertices, Vector3[] colors, Matrix4[] modelviews)
+        private void init(Vector3[] vertices, Vector3[] colors, Matrix4 modelview)
         {
+            DrawType = PrimitiveType.Polygon;
             Vertices = vertices;
             Colors = colors;
-            ModelViews = modelviews;
+            ModelViewMatrix = modelview;
 
             try
             {
@@ -77,50 +57,66 @@ namespace BeatShape.Framework
                 ShaderManager.AddShader("Default", Shader);
             }
 
-            attribute_vpos = Shader.GetAttributeLocation("vPosition");
-            attribute_vcol = Shader.GetAttributeLocation("vColor");
-            uniform_mview = Shader.GetUniformLocation("modelview");
+            GL.GenVertexArrays(1, out vertexArrayID);   //Generate one vertexArrayObject
+            GL.BindVertexArray(vertexArrayID);
 
-            if (attribute_vpos == -1 || attribute_vcol == -1 || uniform_mview == -1)
-            {
-                Console.WriteLine("Error binding attributes");
-            }
+            matrixID = Shader.GetUniformLocation("modelview");
 
-            GL.GenBuffers(1, out vbo_position);
-            GL.GenBuffers(1, out vbo_color);
-            GL.GenBuffers(1, out vbo_mview);
+            GL.GenBuffers(1, out vertexBuffer);
+            GL.GenBuffers(1, out colorBuffer);
         }
 
         public void Prepare()
         {
-            Shader.Begin();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
+            //The following command will talk about our 'vertexBuffer' buffer
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+            //Give the vertices to OpenGL
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Vertices.Length * Vector3.SizeInBytes), Vertices, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(attribute_vpos, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_color);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, colorBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Colors.Length * Vector3.SizeInBytes), Colors, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(attribute_vcol, 3, VertexAttribPointerType.Float, true, 0, 0);
-
-            GL.UniformMatrix4(uniform_mview, false, ref ModelViews[0]);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
         public void Render()
         {
+            Prepare();
             Shader.Begin();
 
-            //Enable attribute
-            GL.EnableVertexAttribArray(attribute_vpos);
-            GL.EnableVertexAttribArray(attribute_vcol);
+            Matrix4 mvMat = ModelViewMatrix;
+
+            //Send uniform matrix
+            GL.UniformMatrix4(matrixID, false, ref mvMat);
+
+            //1st attribute buffer: vertices
+            GL.EnableVertexAttribArray(0);  //attribute 0
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBuffer);
+            GL.VertexAttribPointer(
+                0,                              //attribute 0. No particular reason for 0, but must match the layout in the shader --> layout (location=0)
+                3,                              //size
+                VertexAttribPointerType.Float,  //type
+                false,                          //not normalized
+                0,                              //stride
+                0                               //array buffer offset
+            );
+
+            //2nd attribute buffer: color
+            GL.EnableVertexAttribArray(1);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, colorBuffer);
+            GL.VertexAttribPointer(
+                1,                      //layout(location = 1)
+                3,
+                VertexAttribPointerType.Float,
+                true,
+                0,
+                0
+            );
+
 
             //Draw triangle
-            GL.DrawArrays(PrimitiveType.Polygon, 0, Vertices.Length);
+            GL.DrawArrays(DrawType, 0, Vertices.Length);
 
             //Clean
-            GL.DisableVertexAttribArray(attribute_vpos);
-            GL.DisableVertexAttribArray(attribute_vcol);
+            GL.DisableVertexAttribArray(0);
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatShape.Framework
 {
@@ -36,7 +32,6 @@ namespace BeatShape.Framework
 
         public virtual void Render()
         {
-            Mesh.Prepare();
             Mesh.Render();
         }
 

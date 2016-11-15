@@ -1,13 +1,9 @@
 ﻿using BeatShape.Framework;
 using OpenTK;
-using OpenTK.Graphics.ES20;
+using OpenTK.Graphics.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenTK.Input;
 
 namespace BeatShape
@@ -21,29 +17,54 @@ namespace BeatShape
 
             this.Title = "Hello OpenTK";
 
-            float max_x = 10;
-            float max_y = 10;
+            /*
+            Vector3[] vertdata = new Vector3[] { new Vector3(0.3f, 0.5f, 0f),
+                    new Vector3( -0.3f, 0.5f, 0f),
+                    new Vector3( -0.3f, -0.5f, 0f),
+                    new Vector3( 0.3f, -0.5f, 0f)};
+
+            Vector3[] coldata = new Vector3[] { new Vector3(1f, 1f, 0f), new Vector3(1f, 1f, 0f), new Vector3(1f, 1f, 0f), new Vector3(1f, 1f, 0f) };
+            Mesh2D m = new Mesh2D(vertdata, coldata);
+            var obj = new TestObject("Object One", m);
+
+            vertdata = new Vector3[] { new Vector3(0.5f, 0.8f, 0f),
+                    new Vector3( -0.2f, 0.8f, 0f),
+                    new Vector3( -0.2f, -0.2f, 0f),
+                    new Vector3( 0.5f, -0.2f, 0f)};
+
+            coldata = new Vector3[] { new Vector3(0f, 1f, 0f), new Vector3(0f, 1f, 0f), new Vector3(0f, 1f, 0f), new Vector3(0f, 1f, 0f) };
+            m = new Mesh2D(vertdata, coldata);
+            var obj2 = new TestObject("Object One", m);
+
+            obj.Layer = 1;
+            obj2.Layer = 0;*/
+
+            
+            float max_x = 25;
+            float max_y = 25;
             int count = 0;
             for(float x=0f; x<max_x; x++)
             {
                 for(float y=0f; y<max_y; y++)
                 {
                     float width = 2f / max_x;
-                    float height = 2f / max_y;
+                    float height = 1f / max_y;
                     Vector3[] vertdata = new Vector3[] { new Vector3(-1f + 2*x/max_x, 1f - height - 2*y/max_y, 0f),
-                    new Vector3( -1f + width + 2*x/max_x, 1f - height - 2*y/max_y, 0f),
-                    new Vector3( -1f + (width/2f) + 2*x/max_x,  1f - 2*y/max_y, 0f)};
+                        new Vector3( -1f + (width/2f) + 2*x/max_x, 1f -  2*height - 2*y/max_y, 0f),
+                        new Vector3( -1f + width + 2*x/max_x, 1f - height - 2*y/max_y, 0f),
+                        new Vector3( -1f + (width/2f) + 2*x/max_x,  1f - 2*y/max_y, 0f) };
 
 
-                    Vector3[] coldata = new Vector3[] { new Vector3(1f), new Vector3(1f), new Vector3(1f) };
+                    Vector3[] coldata = new Vector3[] { new Vector3(1f), new Vector3(1f), new Vector3(1f), new Vector3(1f) };
 
                     Mesh2D m = new Mesh2D(vertdata, coldata);
 
                     count++;
-                   // var obj = new TestObject("Object: " + count, m);
+                    var obj = new TestObject("Object: " + count, m);
                 }
             }
 
+            /*
             List<Vector3> vertData = new List<Vector3>();
             List<Vector3> colData = new List<Vector3>();
             for (float x = -1.139f; x <= 1.139; x += 0.001f)
@@ -58,10 +79,10 @@ namespace BeatShape
             }
 
             Mesh2D mm = new Mesh2D(vertData.ToArray(), colData.ToArray());
-            var obj = new TestObject("Heart", mm);
+            var obj = new TestObject("Heart", mm);*/
 
             Console.WriteLine("Loading finished");
-            GL.ClearColor(Color.CornflowerBlue);
+            GL.ClearColor(Color.ForestGreen);
         }
 
         //draw
@@ -69,11 +90,12 @@ namespace BeatShape
         {
             base.OnRenderFrame(e);
             GL.Viewport(0, 0, Width, Height);
+            GL.Enable(EnableCap.DepthTest);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             EventDispatcher.Invoke("RenderBehaviour");
 
-            //Console.WriteLine("FPS: " + 1f / e.Time);
+            Console.WriteLine("FPS: " + 1f / e.Time);
 
             GL.Flush();
 
