@@ -18,6 +18,12 @@ namespace BeatShape.Framework
             if (allObjects.ContainsKey(obj.InstaceID)) allObjects.Remove(obj.InstaceID);
         }
 
+        public static GameObject Find(Guid guid)
+        {
+            //if (allObjects.ContainsKey(guid))
+            return null;
+        }
+
         public static void PrintAll()
         {
             for(int i=0; i<allObjects.Count; i++)

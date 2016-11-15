@@ -5,11 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using OpenTK.Input;
+using OpenTK.Graphics;
 
 namespace BeatShape
 {
     class Game : GameWindow
     {
+        public Game(int width, int height) :base(width, height, new GraphicsMode(32, 24, 0, 4))//anti alisaing
+        {}
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -40,8 +43,8 @@ namespace BeatShape
             obj2.Layer = 0;*/
 
             
-            float max_x = 25;
-            float max_y = 25;
+            float max_x = 10;
+            float max_y = 10;
             int count = 0;
             for(float x=0f; x<max_x; x++)
             {
@@ -60,6 +63,7 @@ namespace BeatShape
                     Mesh2D m = new Mesh2D(vertdata, coldata);
 
                     count++;
+                    Console.WriteLine(count);
                     var obj = new TestObject("Object: " + count, m);
                 }
             }

@@ -64,6 +64,9 @@ namespace BeatShape.Framework
 
             GL.GenBuffers(1, out vertexBuffer);
             GL.GenBuffers(1, out colorBuffer);
+
+            //Prepare only once at initialization, or when vertices change
+            Prepare();
         }
 
         public void Prepare()
@@ -79,7 +82,7 @@ namespace BeatShape.Framework
 
         public void Render()
         {
-            Prepare();
+            //Prepare();
             Shader.Begin();
 
             Matrix4 mvMat = ModelViewMatrix;
