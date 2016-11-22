@@ -5,7 +5,7 @@ namespace BeatShape.Framework
 {
     class Shader : IDisposable
     {
-        private int programID = 0;
+        public int programID = 0;
 
         public bool IsLinked { get; private set; }
         public string LastLog { get; private set; }
