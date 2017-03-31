@@ -1,35 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenTK.Input;
 
 namespace BeatShape.Framework
 {
     class GameObjectManager
     {
-        private static Dictionary<Guid, GameObject> allObjects = new Dictionary<Guid, GameObject>();
+        private List<GameObject> gameObjects = new List<GameObject>();
+        public IEnumerable<GameObject> GameObjects { get { return gameObjects; } }
 
-        public static void Add(GameObject obj)
+        public GameObjectManager()
         {
-            allObjects.Add(obj.InstaceID, obj);
+            gameObjects.Add(new Player());
         }
 
-        public static void Remove(GameObject obj)
+        public void Render()
         {
-            if (allObjects.ContainsKey(obj.InstaceID)) allObjects.Remove(obj.InstaceID);
-        }
-
-        public static GameObject Find(Guid guid)
-        {
-            //if (allObjects.ContainsKey(guid))
-            return null;
-        }
-
-        public static void PrintAll()
-        {
-            for(int i=0; i<allObjects.Count; i++)
+            foreach (var behaviour in gameObjects.OfType<IBehaviour>())
             {
-                var kvp = allObjects.ElementAt(i);
-                Console.WriteLine("ID: " + kvp.Key + ", Name: " + kvp.Value.Name);
+                behaviour.Render();
+            }
+        }
+
+        public void Update()
+        {
+            foreach (var behaviour in gameObjects.OfType<IBehaviour>())
+            {
+                behaviour.Update();
+            }
+        }
+
+        public void KeyDown(KeyboardKeyEventArgs e)
+        {
+            foreach (var control in gameObjects.OfType<IControllable>())
+            {
+                control.OnKeyDown(e);
             }
         }
     }

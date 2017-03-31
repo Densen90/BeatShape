@@ -4,7 +4,7 @@ using System;
 
 namespace BeatShape.Framework
 {
-    class Mesh2D
+    abstract class Mesh2D : IDisposable
     {
         #region object data
         public Vector3[] Vertices { get; set; }
@@ -12,6 +12,7 @@ namespace BeatShape.Framework
         public Matrix4 ModelViewMatrix { get; set; }
         public Shader Shader { get; set; }
         public PrimitiveType DrawType { get; set; }
+        public Matrix4 ScaleAdjust { get; private set; }
         #endregion
 
         private int vertexArrayID; //VAO
@@ -22,25 +23,23 @@ namespace BeatShape.Framework
 
         public Mesh2D()
         {
-            Vector3[] vertdata = new Vector3[] { new Vector3(-0.8f, -0.8f, 0f),
-                new Vector3( 0.8f, -0.8f, 0f),
-                new Vector3( 0f,  0.8f, 0f)};
-
-
-            Vector3[] coldata = new Vector3[] { new Vector3(1f, 0f, 0f),
-                new Vector3( 0f, 0f, 1f),
-                new Vector3( 0f,  1f, 0f)};
-
-            init(vertdata, coldata, Matrix4.Identity);
         }
 
-        public Mesh2D(Vector3[] vertices, Vector3[] colors, Matrix4 modelview = default(Matrix4))
+        //public Mesh2D(Vector3[] vertices, Vector3[] colors, Matrix4 modelview = default(Matrix4))
+        //{
+        //    init(vertices, colors, modelview == default(Matrix4) ? Matrix4.Identity  : modelview);
+        //}
+
+        public void Dispose()
         {
-            init(vertices, colors, modelview == default(Matrix4) ? Matrix4.Identity  : modelview);
+            EventDispatcher.RemoveListener("ResizeScreen", AdjustScalematrix);
         }
 
-        private void init(Vector3[] vertices, Vector3[] colors, Matrix4 modelview)
+        protected void init(Vector3[] vertices, Vector3[] colors, Matrix4 modelview)
         {
+            EventDispatcher.AddListener("ResizeScreen", AdjustScalematrix);
+            float aspect = Screen.Width / Screen.Height;
+            ScaleAdjust = new Matrix4(new Vector4(aspect>1 ? 1 : aspect, 0, 0, 0), new Vector4(0, aspect>1 ? aspect : 1, 0, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 0, 1));
             DrawType = PrimitiveType.Polygon;
             Vertices = vertices;
             Colors = colors;
@@ -85,7 +84,7 @@ namespace BeatShape.Framework
             //Prepare();
             Shader.Begin();
 
-            Matrix4 mvMat = ModelViewMatrix;
+            Matrix4 mvMat = ModelViewMatrix * ScaleAdjust;
 
             //Send uniform matrix
             GL.UniformMatrix4(matrixID, false, ref mvMat);
@@ -120,6 +119,12 @@ namespace BeatShape.Framework
 
             //Clean
             GL.DisableVertexAttribArray(0);
+        }
+
+        private void AdjustScalematrix()
+        {
+            float aspect = Screen.Width / Screen.Height;
+            ScaleAdjust = new Matrix4(new Vector4(aspect > 1 ? 1 : aspect, 0, 0, 0), new Vector4(0, aspect > 1 ? aspect : 1, 0, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 0, 1));
         }
     }
 }

@@ -4,7 +4,5 @@
     {
         void Update();
         void Render();
-        void OnCollision(GameObject other);
-
     }
 }
