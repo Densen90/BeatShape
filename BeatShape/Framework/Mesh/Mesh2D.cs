@@ -7,8 +7,20 @@ namespace BeatShape.Framework
     abstract class Mesh2D : IDisposable
     {
         #region object data
-        public Vector3[] Vertices { get; set; }
-        public Vector3[] Colors { get; set; }
+        private Vector3[] vertices;
+        public Vector3[] Vertices
+        {
+            get { return vertices; }
+            set { vertices = value; changed = true; }
+        }
+
+        private Vector3[] colors;
+        public Vector3[] Colors
+        {
+            get { return colors; }
+            set { colors = value; changed = true; }
+        }
+
         public Matrix4 ModelViewMatrix { get; set; }
         public Shader Shader { get; set; }
         public PrimitiveType DrawType { get; set; }
@@ -20,6 +32,7 @@ namespace BeatShape.Framework
         private int colorBuffer; //VBO
 
         private int matrixID;
+        private bool changed = false;
 
         public Mesh2D()
         {
@@ -81,7 +94,7 @@ namespace BeatShape.Framework
 
         public void Render()
         {
-            //Prepare();
+            if(changed) Prepare();
             Shader.Begin();
 
             Matrix4 mvMat = ModelViewMatrix * ScaleAdjust;

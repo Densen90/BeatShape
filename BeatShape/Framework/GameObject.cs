@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 
 namespace BeatShape.Framework
 {
@@ -27,6 +28,24 @@ namespace BeatShape.Framework
         public virtual void Render()
         {
             Mesh?.Render();
+        }
+
+        public void Scale(Vector2 scale)
+        {
+            Vector3 scaleV = new Vector3(scale.X, scale.Y, 1);
+            for (int i = 0; i < Mesh.Vertices.Length; i++)
+            {
+                Mesh.Vertices[i] = Vector3.Multiply( Mesh.Vertices[i], scaleV );
+            }
+        }
+
+        public void Translate(Vector2 translate)
+        {
+            Vector3 transformV = new Vector3(translate.X, translate.Y, 0);
+            for (int i = 0; i < Mesh.Vertices.Length; i++)
+            {
+                Mesh.Vertices[i] = Vector3.Add( Mesh.Vertices[i], transformV );
+            }
         }
     }
 }
