@@ -12,7 +12,7 @@ namespace BeatShape.Framework
         public float Radius { get; private set; }
         public int Segments { get; private set; }
 
-        public CircleMesh(float radius = 0.1f, int segments = 30) : base()
+        public CircleMesh(float radius = 0.05f, int segments = 30) : base()
         {
             Radius = radius;
             Segments = segments;

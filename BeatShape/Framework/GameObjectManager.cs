@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using OpenTK.Input;
+using OpenTK;
 
 namespace BeatShape.Framework
 {
@@ -10,6 +11,7 @@ namespace BeatShape.Framework
         private List<GameObject> gameObjects = new List<GameObject>();
         public IEnumerable<GameObject> GameObjects { get { return gameObjects; } }
 
+        int iterations = 50;
         public GameObjectManager()
         {
             gameObjects.Add(new Player());
@@ -36,6 +38,22 @@ namespace BeatShape.Framework
             foreach (var control in gameObjects.OfType<IControllable>())
             {
                 control.OnKeyDown(e);
+            }
+        }
+
+        public void KeyUp(KeyboardKeyEventArgs e)
+        {
+            foreach (var control in gameObjects.OfType<IControllable>())
+            {
+                control.OnKeyUp(e);
+            }
+        }
+
+        public void KeyPress(KeyPressEventArgs e)
+        {
+            foreach (var control in gameObjects.OfType<IControllable>())
+            {
+                control.OnKeyPress(e);
             }
         }
     }

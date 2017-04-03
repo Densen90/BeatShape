@@ -20,7 +20,7 @@ namespace BeatShape
         public override void Update()
         {
             base.Update();
-            this.Translate(new Vector2(horizontal * Speed, vertical * Speed));
+            this.Translate(new Vector2(horizontal, vertical) * Speed);
         }
 
         public void OnCollision(ICollidable other)
@@ -30,19 +30,22 @@ namespace BeatShape
 
         public void OnKeyDown(KeyboardKeyEventArgs e)
         {
-            if (e.Key.Equals(Key.A)) horizontal = -1f;
-            if (e.Key.Equals(Key.D)) horizontal = 1f;
-            if (e.Key.Equals(Key.W)) vertical = 1f;
-            if (e.Key.Equals(Key.S)) vertical = -1f;
+            if (e.Key.Equals(Key.A)) horizontal -= 1f;
+            if (e.Key.Equals(Key.D)) horizontal += 1f;
+            if (e.Key.Equals(Key.W)) vertical += 1f;
+            if (e.Key.Equals(Key.S)) vertical -= 1f;
         }
 
         public void OnKeyPress(KeyPressEventArgs e)
         {
-            Console.WriteLine("Key press player");
         }
 
         public void OnKeyUp(KeyboardKeyEventArgs e)
         {
+            if (e.Key.Equals(Key.A)) horizontal += 1f;
+            if (e.Key.Equals(Key.D)) horizontal -= 1f;
+            if (e.Key.Equals(Key.W)) vertical -= 1f;
+            if (e.Key.Equals(Key.S)) vertical += 1f;
         }
     }
 }

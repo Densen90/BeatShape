@@ -13,12 +13,13 @@ namespace BeatShape
     {
         private GameObjectManager goManager;
 
-        public Game(int width, int height) :base(width, height, new GraphicsMode(32, 24, 0, 4))//anti alisaing
+        public Game(int width, int height) : base(width, height, new GraphicsMode(32, 24, 0, 4))//anti alisaing
         {
             Screen.Width = width;
             Screen.Height = height;
             goManager = new GameObjectManager();
         }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -59,9 +60,24 @@ namespace BeatShape
         {
             base.OnKeyDown(e);
 
-            goManager.KeyDown(e);
+            //only fire this event once, when first is pressed and not repeatedly
+            if (!e.IsRepeat) goManager.KeyDown(e);
 
             if (e.Key == Key.Escape) Close();
+        }
+
+        protected override void OnKeyUp(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+
+            if (!e.IsRepeat) goManager.KeyUp(e);
+        }
+
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            base.OnKeyPress(e);
+
+            goManager.KeyPress(e);
         }
 
         protected override void OnResize(EventArgs e)
@@ -71,11 +87,6 @@ namespace BeatShape
             Screen.Width = Width;
             Screen.Height = Height;
             EventDispatcher.Invoke("ResizeScreen");
-        }
-
-        float cbrt(double x)
-        {
-            return (float)Math.Pow(x, (1.0 / 3.0));
         }
     }
 }
