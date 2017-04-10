@@ -10,14 +10,30 @@ namespace BeatShape.Framework
 
         public Guid InstanceID { get; private set; }
 
-        private Vector3 position = new Vector3(0, 0, 0);
-        public Vector3 Position
+        private Vector2 position = new Vector2(0, 0);
+        public Vector2 Position
         {
             get { return position; }
             set
             {
-                Vector3 diff = Vector3.Subtract(value, position);
-                Translate(new Vector2(diff.X, diff.Y));
+                position = value;
+                Matrix4 outMat;
+                Matrix4.CreateTranslation(value.X, value.Y, 0f, out outMat);
+                Mesh.TranslationMatrix = outMat;
+            }
+        }
+
+        private float rotation = 0f;
+        public float Rotation
+        {
+            get { return rotation; }
+            set
+            {
+                rotation = value;
+                Matrix4 outMat;
+                Matrix4.CreateRotationZ(value, out outMat);
+                //Matrix4.CreateTranslation(value.X, value.Y, 0f, out outMat);
+                Mesh.RotationMatrix = outMat;
             }
         }
 
@@ -52,13 +68,7 @@ namespace BeatShape.Framework
 
         public void Translate(Vector2 translate)
         {
-            Vector3 transformV = new Vector3(translate.X, translate.Y, 0);
-            for (int i = 0; i < Mesh.Vertices.Length; i++)
-            {
-                Mesh.Vertices[i] = Vector3.Add(Mesh.Vertices[i], transformV);
-            }
-
-            position = Vector3.Add(position, new Vector3(translate.X, translate.Y, 0f));
+            Position = Vector2.Add(position, translate);
         }
     }
 }

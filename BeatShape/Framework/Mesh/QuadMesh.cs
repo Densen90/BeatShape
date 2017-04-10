@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 
 namespace BeatShape.Framework
 {
-    class CircleMesh : Mesh2D
+    class QuadMesh : Mesh2D
     {
-        public float Radius { get; private set; }
-        public int Segments { get; private set; }
+        public Box2D Box { get; private set; }
 
-        public CircleMesh(float radius = 0.01f, int segments = 30) : base()
+        public QuadMesh(float width = 0.01f, float height = 0.01f) : base()
         {
-            Radius = radius;
-            Segments = segments;
+            Box = new Box2D(-width / 2f, -height / 2f, width, height);
 
             Vector3[] vertices;
             Vector3[] col;
@@ -29,13 +27,17 @@ namespace BeatShape.Framework
             List<Vector3> vertices = new List<Vector3>();
             List<Vector3> col = new List<Vector3>();
 
-            for (int a = 0; a < 360; a += 360 / Segments)
-            {
-                float heading = a * (float)Math.PI / 180f;
-                Vector3 v = new Vector3((float)Math.Cos(heading) * Radius, (float)Math.Sin(heading) * Radius, 0);
-                vertices.Add(v);
-                col.Add(new Vector3(0, 1, 1));
-            }
+            vertices.Add(new Vector3(Box.MaxX, Box.MaxY, 0f));
+            col.Add(new Vector3(0, 1, 1));
+
+            vertices.Add(new Vector3(Box.X, Box.MaxY, 0f));
+            col.Add(new Vector3(0, 1, 1));
+
+            vertices.Add(new Vector3(Box.X, Box.Y, 0f));
+            col.Add(new Vector3(0, 1, 1));
+
+            vertices.Add(new Vector3(Box.MaxX, Box.Y, 0f));
+            col.Add(new Vector3(0, 1, 1));
 
             verts = vertices.ToArray();
             cols = col.ToArray();

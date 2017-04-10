@@ -14,7 +14,18 @@ namespace BeatShape.Framework
         int iterations = 50;
         public GameObjectManager()
         {
+            //for (float i = -iterations / 2; i <= iterations / 2; i++)
+            //{
+            //    for (float j = -iterations / 2; j <= iterations / 2; j++)
+            //    {
+            //        var p = new Player();
+            //        p.Position = new Vector3(i / iterations * 1.2f, j / iterations * 1.8f, 0);
+            //        gameObjects.Add(p);
+            //    }
+            //}
             gameObjects.Add(new Player());
+            var p = new Player();
+            gameObjects.Add(p);
         }
 
         public void Render()

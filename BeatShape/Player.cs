@@ -14,13 +14,15 @@ namespace BeatShape
 
         public Player() : base()
         {
-            this.Mesh = new CircleMesh();
+            //this.Mesh = new CircleMesh();
+            this.Mesh = new QuadMesh(1, 1);
         }
 
         public override void Update()
         {
             base.Update();
             this.Translate(new Vector2(horizontal, vertical) * Speed);
+            this.Rotation = (this.Rotation + 0.02f) % 360f;
         }
 
         public void OnCollision(ICollidable other)
