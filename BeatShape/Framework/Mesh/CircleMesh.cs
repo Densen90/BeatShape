@@ -9,7 +9,7 @@ namespace BeatShape.Framework
         public float Radius { get; private set; }
         public int Segments { get; private set; }
 
-        public CircleMesh(float radius = 0.01f, int segments = 30) : base()
+        public CircleMesh(float radius = 0.5f, int segments = 100) : base()
         {
             Radius = radius;
             Segments = segments;
@@ -26,7 +26,7 @@ namespace BeatShape.Framework
             List<Vector3> vertices = new List<Vector3>();
             List<Vector3> col = new List<Vector3>();
 
-            for (int a = 0; a < 360; a += 360 / Segments)
+            for (float a = 0f; a < 360f; a += 360f / Segments)
             {
                 float heading = a * (float)Math.PI / 180f;
                 Vector3 v = new Vector3((float)Math.Cos(heading) * Radius, (float)Math.Sin(heading) * Radius, 0);
@@ -34,6 +34,7 @@ namespace BeatShape.Framework
                 col.Add(new Vector3(0, 1, 1));
             }
 
+            Console.WriteLine("Verts: " + vertices.Count);
             verts = vertices.ToArray();
             cols = col.ToArray();
         }

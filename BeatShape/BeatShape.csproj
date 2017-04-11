@@ -51,10 +51,11 @@
     <Compile Include="Framework\EventDispatcher.cs" />
     <Compile Include="Framework\GameObject.cs" />
     <Compile Include="Framework\GameObjectManager.cs" />
+    <Compile Include="Framework\Geometry\Box2D.cs" />
     <Compile Include="Framework\Interfaces\ICollidable.cs" />
     <Compile Include="Framework\Interfaces\IControllable.cs" />
-    <Compile Include="Framework\Mesh\CircleMesh.cs" />
     <Compile Include="Framework\Mesh\QuadMesh.cs" />
+    <Compile Include="Framework\Mesh\CircleMesh.cs" />
     <Compile Include="Framework\Screen.cs" />
     <Compile Include="Framework\Interfaces\IBehaviour.cs" />
     <Compile Include="Framework\Mesh\Mesh2D.cs" />
@@ -77,6 +78,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

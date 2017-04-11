@@ -12,15 +12,17 @@ namespace BeatShape
         private float vertical = 0f;
         private float Speed = 0.01f;
 
-        public Player() : base()
+        public Player() : base(new QuadMesh(1f, 1f))
         {
-            this.Mesh = new CircleMesh();
+            //this.Mesh = new CircleMesh();
+            //this.Mesh = new QuadMesh(0.01f, 0.01f);
         }
 
         public override void Update()
         {
             base.Update();
             this.Translate(new Vector2(horizontal, vertical) * Speed);
+            this.Rotation = (this.Rotation + 0.02f) % 360f;
         }
 
         public void OnCollision(ICollidable other)

@@ -41,7 +41,7 @@ namespace BeatShape
 
             goManager.Render();
 
-            Console.WriteLine("FPS: " + 1f / e.Time);
+            //Console.WriteLine("FPS: " + 1f / e.Time);
 
             GL.Flush();
 

@@ -11,20 +11,24 @@ namespace BeatShape.Framework
         public Vector3[] Vertices
         {
             get { return vertices; }
-            set { vertices = value; changed = true; }
+            internal set { vertices = value; changed = true; }
         }
 
         private Vector3[] colors;
         public Vector3[] Colors
         {
             get { return colors; }
-            set { colors = value; changed = true; }
+            internal set { colors = value; changed = true; }
         }
 
-        public Matrix4 ModelViewMatrix { get; set; }
-        public Shader Shader { get; set; }
-        public PrimitiveType DrawType { get; set; }
+        public Matrix4 TranslationMatrix { get; internal set; }
+        public Matrix4 RotationMatrix { get; internal set; }
+
+        public Matrix4 ModelViewMatrix { get; internal set; }
+        public PrimitiveType DrawType { get; internal set; }
         public Matrix4 ScaleAdjust { get; private set; }
+
+        public Shader Shader { get; set; }
         #endregion
 
         private int vertexArrayID; //VAO
@@ -51,8 +55,9 @@ namespace BeatShape.Framework
         protected void init(Vector3[] vertices, Vector3[] colors, Matrix4 modelview)
         {
             EventDispatcher.AddListener("ResizeScreen", AdjustScalematrix);
-            float aspect = Screen.Width / Screen.Height;
-            ScaleAdjust = new Matrix4(new Vector4(aspect>1 ? 1 : aspect, 0, 0, 0), new Vector4(0, aspect>1 ? aspect : 1, 0, 0), new Vector4(0, 0, 1, 0), new Vector4(0, 0, 0, 1));
+            TranslationMatrix = Matrix4.Identity;
+            RotationMatrix = Matrix4.Identity;
+            AdjustScalematrix();
             DrawType = PrimitiveType.Polygon;
             Vertices = vertices;
             Colors = colors;
@@ -98,7 +103,7 @@ namespace BeatShape.Framework
             if (changed) Prepare();
             Shader.Begin();
 
-            Matrix4 mvMat = ModelViewMatrix * ScaleAdjust;
+            Matrix4 mvMat = ModelViewMatrix * RotationMatrix * ScaleAdjust * TranslationMatrix;
 
             //Send uniform matrix
             GL.UniformMatrix4(matrixID, false, ref mvMat);
