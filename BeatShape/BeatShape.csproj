@@ -54,6 +54,7 @@
     <Compile Include="Framework\Interfaces\ICollidable.cs" />
     <Compile Include="Framework\Interfaces\IControllable.cs" />
     <Compile Include="Framework\Mesh\CircleMesh.cs" />
+    <Compile Include="Framework\Mesh\QuadMesh.cs" />
     <Compile Include="Framework\Screen.cs" />
     <Compile Include="Framework\Interfaces\IBehaviour.cs" />
     <Compile Include="Framework\Mesh\Mesh2D.cs" />

@@ -17,7 +17,6 @@ namespace BeatShape
         {
             Screen.Width = width;
             Screen.Height = height;
-            goManager = new GameObjectManager();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -25,7 +24,8 @@ namespace BeatShape
             base.OnLoad(e);
             Console.WriteLine("Load Game");
 
-            this.Title = "Hello OpenTK";
+            this.Title = "BeatShape";
+            goManager = new GameObjectManager();
 
             Console.WriteLine("Loading finished");
             GL.ClearColor(Color.CornflowerBlue);
@@ -41,7 +41,7 @@ namespace BeatShape
 
             goManager.Render();
 
-            //Console.WriteLine("FPS: " + 1f / e.Time);
+            Console.WriteLine("FPS: " + 1f / e.Time);
 
             GL.Flush();
 

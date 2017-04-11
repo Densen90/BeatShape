@@ -11,10 +11,19 @@ namespace BeatShape.Framework
         private List<GameObject> gameObjects = new List<GameObject>();
         public IEnumerable<GameObject> GameObjects { get { return gameObjects; } }
 
-        int iterations = 50;
+        int iterations = 100;
         public GameObjectManager()
         {
-            gameObjects.Add(new Player());
+            for(int i=-iterations/2; i<=iterations/2; i++)
+            {
+                for (int j = -iterations / 2; j <= iterations / 2; j++)
+                {
+                    var p = new Player();
+                    p.Position = new Vector3(i, j, 0f) * 0.02f;
+                    gameObjects.Add(p);
+                }
+            }
+            
         }
 
         public void Render()

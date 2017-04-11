@@ -1,9 +1,6 @@
 ﻿using OpenTK;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatShape.Framework
 {
@@ -12,7 +9,7 @@ namespace BeatShape.Framework
         public float Radius { get; private set; }
         public int Segments { get; private set; }
 
-        public CircleMesh(float radius = 0.05f, int segments = 30) : base()
+        public CircleMesh(float radius = 0.01f, int segments = 30) : base()
         {
             Radius = radius;
             Segments = segments;

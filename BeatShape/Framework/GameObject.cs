@@ -52,6 +52,7 @@ namespace BeatShape.Framework
 
         public void Translate(Vector2 translate)
         {
+            if (Vector2.Equals(Vector2.Zero, translate)) return;
             Vector3 transformV = new Vector3(translate.X, translate.Y, 0);
             for (int i = 0; i < Mesh.Vertices.Length; i++)
             {

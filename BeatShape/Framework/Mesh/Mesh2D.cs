@@ -90,11 +90,12 @@ namespace BeatShape.Framework
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, colorBuffer);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(Colors.Length * Vector3.SizeInBytes), Colors, BufferUsageHint.StaticDraw);
+            changed = false;
         }
 
         public void Render()
         {
-            if(changed) Prepare();
+            if (changed) Prepare();
             Shader.Begin();
 
             Matrix4 mvMat = ModelViewMatrix * ScaleAdjust;
