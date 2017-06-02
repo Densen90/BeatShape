@@ -1,9 +1,5 @@
 using OpenTK;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeatShape.Framework
 {
@@ -11,7 +7,7 @@ namespace BeatShape.Framework
     {
         public Box2D Box { get; private set; }
 
-        public QuadMesh(float width = 0.01f, float height = 0.01f) : base()
+        public QuadMesh(float width = 0.5f, float height = 0.5f) : base()
         {
             Box = new Box2D(-width / 2f, -height / 2f, width, height);
 
